@@ -3,15 +3,18 @@ const Review = require("./models/review");
 const ExpressError =require("./utils/ExpressError.js");
 const { listingSchema, reviewSchema } = require("./schema.js");
 
-module.exports.isLoggedIn = (req,res,next)=>{
-if(!req.isAuthenticated()){
-        req.session.redirectUrl= req.originalUrl;
-        req.flash("error","you must be logged in to create listings");
-        return res.redirect("/login");
+module.exports.isLoggedIn = (req, res, next) => {
+    if (!req.isAuthenticated()) {
+        req.session.redirectUrl = req.originalUrl;
+        req.flash("error", "you must be logged in to create listings");
+        // Manually save session to ensure redirectUrl is stored before redirecting
+        return req.session.save((err) => {
+            if (err) return next(err);
+            res.redirect("/login");
+        });
     }
     next();
 };
-
 module.exports.saveRedirectUrl=(req,res,next)=>{
     if(req.session.redirectUrl){
         res.locals.redirectUrl=req.session.redirectUrl;

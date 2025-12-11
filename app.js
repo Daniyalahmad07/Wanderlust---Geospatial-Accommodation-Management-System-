@@ -43,10 +43,12 @@ app.use(express.static(path.join(__dirname, "public")));
 
 const store = MongoStore.create({
     mongoUrl: dbUrl,
-    crypto: {
-        secret: "mysupersecretcode",
-    },
+    // crypto: {                  <--COMMENT OUT these 3 lines
+    //    secret: process.env.SECRET,
+    // },
     touchAfter: 24 * 3600,
+    // collectionName: 'sessions_new' <-- You can remove this too, or leave it. 
+    //                                    It doesn't matter once crypto is gone.
 });
 
 store.on("error",(err)=>{
@@ -55,7 +57,7 @@ store.on("error",(err)=>{
 
 const sessionOptions={
     store,
-    secret:"mysupersecretcode",
+    secret: process.env.SECRET,
     resave:false,
     saveUninitialized:false,
     cookie:{
