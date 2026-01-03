@@ -103,4 +103,4 @@ Daniyal Ahmad
 
 ## 📜 License
 
-This project is for learning and portfolio purposes.
+This project is licensed under the MIT License.
